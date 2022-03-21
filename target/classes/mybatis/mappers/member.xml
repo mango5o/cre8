@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <!--  회원정보 SQL을 핸들링할 것이다. -->
+
+
+
+<mapper namespace="mapper.member">
+	<resultMap id="memResult" type="memberVO">
+		<result property="id" column="id" />
+        <result property="pwd" column="pwd" />
+        <result property="name" column="name" />
+        <result property="nickname" column="nickname" />
+        <result property="email" column="email" />
+        <result property="joinDate" column="joinDate" />
+        <result property="state" column="state" />
+	</resultMap> 
+
+	<select id="selectAllMemberList" resultMap="memResult">
+      <![CDATA[
+         select * from member order by joinDate desc	 	
+      ]]>
+	</select>
+	
+   
+  <insert id="insertMember"  parameterType="memberVO">
+		<![CDATA[
+		 insert into member(id, pwd, name, nickname, email, state)
+		 values(#{id}, #{pwd}, #{name}, #{nickname}, #{email}, 0)
+		]]>      
+	</insert>
+
+   
+ <select id="selectMemberIDCheck" resultType="int"  parameterType="String" >
+      <![CDATA[
+         SELECT COUNT(*) 
+         from member
+         where id=#{id}			
+      ]]>
+	 </select> 
+  
+   
+   <!-- 회원 1명 선택 -->
+	<select id="selectMemberById" resultType="memberVO"  parameterType="String" >
+      <![CDATA[
+         select * from member
+         where
+         id=#{id}			
+      ]]>
+	 </select>
+   
+   <!-- 회원정보 수정 -->
+   <!-- id와 이름은 수정하지 않을 것 -->
+   <update id="updateMember"  parameterType="memberVO">
+     <![CDATA[
+	     update member
+	     set pwd=#{pwd}, nickname=#{nickname}, email=#{email}
+	     where
+	     id=#{id}
+      ]]>      
+   </update> 
+   
+   
+   <!-- 차후 탈퇴처리 수정용 -->
+   <update id="joinoutMember"  parameterType="memberVO">
+	<![CDATA[
+	     update member
+	     set state=1
+	     where
+	     id=#{id}
+	]]> 
+	</update> 
+	         
+   <delete id="deleteMember"  parameterType="String">
+	<![CDATA[	   
+	   delete from member
+	   where
+	   id=#{id}
+	]]>      
+  </delete>
+  
+
+	 
+  
+  <select id="loginById"  resultType="memberVO"   parameterType="memberVO" >
+	<![CDATA[
+		select * from member	
+		where id=#{id} and pwd=#{pwd}		
+	]]>
+  </select>
+</mapper>

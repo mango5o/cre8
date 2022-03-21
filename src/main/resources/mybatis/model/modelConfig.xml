@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration 	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- alias -->
+
+
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.spring.cre8.member.dto.MemberDTO"  alias="memberVO" />
+		<typeAlias type="com.spring.cre8.board.dto.ArticleVO"  alias="articleVO" />
+		<typeAlias type="com.spring.cre8.board.dto.AdminArticleVO"  alias="adminArticleVO" />
+		<typeAlias type="com.spring.cre8.board.dto.CommentsVO"  alias="commentsVO" />
+		<typeAlias type="com.spring.cre8.board.dto.ImageVO"  alias="imageVO" />
+		<typeAlias type="com.spring.cre8.likes.dto.LikesDTO"  alias="likesDTO" />
+		<typeAlias type="com.spring.cre8.point.dto.PointDTO"  alias="pointDTO" />
+
+	</typeAliases>
+</configuration>

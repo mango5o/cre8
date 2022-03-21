@@ -1,0 +1,42 @@
+@charset "UTF-8";
+.viewTB {
+	margin: 0 auto;
+	width: 800px;
+	border-collapse: collapse;
+}
+
+.viewTB tbody td {
+	border-bottom: 1px solid #6a6a6a;
+	padding: 10px;
+	text-align: center;
+}
+
+.viewTB th {
+	padding: 10px;
+	background-color: #eaeaea;
+	
+}
+
+#_title {
+	text-align: left;
+}
+
+a.button {
+	display: inline-block;
+	width: 120px;
+	line-height: 30px;
+	text-align: center;
+	background-color: #222;
+	color: #fff;
+	font-size: 12pt;
+	text-decoration: none;
+}
+
+.button {
+	width: 120px;
+	height: 30px;
+	border: none;
+	background-color: #222;
+	font-size: 12pt;
+	color: #fff;
+}

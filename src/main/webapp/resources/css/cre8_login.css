@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+.login_outer {
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+.box {
+	position: relative;
+	border: solid 1px #ccc;
+	width: 200px;
+	margin: auto;
+	padding: 20px 40px; /* 상하 좌우 */
+}
+
+.loginbox {
+	position: relative;
+	margin: 10px auto;
+}
+
+.loginSubmit {
+	position: relative;
+	margin: 20px auto;
+}
+
+.loginbox>input {
+	background: transparent;
+	border: none;
+	border-bottom: solid 1px #ccc;
+	padding: 15px 15px 5px 5px;
+	font-size: 13pt;
+	width: 185px;
+}
+
+label {
+	display: none
+}
+
+.loginSubmit>input {
+	border: solid 1px #ccc;
+	padding: 10px;
+	margin: auto;
+	background-color: #222;
+	font-size: 12pt;
+	color: #fff;
+	font-size: 13pt;
+	width: 200px;
+}

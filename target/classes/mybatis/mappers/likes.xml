@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.likes">
+	<resultMap id="likesResult" type="likesDTO">
+		<result property="likesId" column="like_id" />
+		<result property="articleNO" column="board_code" />
+		<result property="likesDate" column="like_date" />
+		<result property="categoryNO" column="cate_code" />
+		<result property="boardTitle" column="board_title" />
+		<result property="boardWriter" column="board_writer" />
+	</resultMap>
+	 
+	 <!-- ID별 좋아요 글 목록 -->
+	 <select id="selectLikesListById" resultMap="likesResult" parameterType="String" >
+      <![CDATA[
+		select 
+		likes.like_id, likes.board_code, likes.like_date, board.cate_code, board.board_title, board.board_writer
+		from likes 
+		join board on(likes.board_code = board.board_code)
+		where like_id=#{id}
+		order by likes.like_date desc
+      ]]>
+	 </select>
+	 
+	 <!-- 좋아요를 했는지 중복검사 -->
+   	<select id="likesCheck" resultType="int" parameterType="java.util.Map">
+      <![CDATA[
+		select count(*) from likes 
+		where 
+		board_code=#{articleNO} 
+		and like_id =#{likesId}
+     ]]>
+	 </select>
+	 
+
+	 <!-- ID별 좋아요 한 갯수 가져오기 -->
+   	<select id="selectLikesCountById" resultType="int" parameterType="String" >
+      <![CDATA[
+      	select count (board_code) 
+      	from likes 
+      	where like_id=#{likesId}
+      ]]>
+	 </select>
+	 
+	 <!-- 글별 좋아요 한 갯수 가져오기 -->
+   	<select id="selectLikesCountByArticleNO" resultType="int" parameterType="int" >
+      <![CDATA[
+      	select count (*) as count 
+      	from 
+      	likes where board_code=#{articleNO}
+      ]]>
+	 </select>
+
+	 <!-- 좋아요 누르기 -->
+   	<insert id="insertLikes" parameterType="java.util.Map" >
+      <![CDATA[
+      	insert into likes(like_id, board_code, like_date)
+      	values
+      	(#{likesId}, #{articleNO}, sysdate)
+      ]]>
+	 </insert>
+
+	 <!-- 좋아요 취소 -->
+   	<delete id="deleteLikes" parameterType="java.util.Map" >
+      <![CDATA[
+      	delete from likes 
+      	where 
+      	board_code=#{articleNO} 
+      	and 
+      	like_id = #{likesId}
+      ]]>
+	 </delete>
+	 </mapper>

@@ -1,0 +1,87 @@
+@charset "UTF-8";
+.viewTB {
+	margin: 0 auto;
+	border-collapse: collapse;
+}
+
+.viewTB tbody td {
+	padding: 5px 5px 0 0;
+}
+
+._left {
+	text-align: left;
+}
+
+._right {
+	text-align: right;
+}
+
+._contentTitle {
+	font-size: 13px;
+	font-style: normal;
+	width: 680px;
+	height: 30px;
+	border: 1px solid #ccc;
+	padding: 10px;
+	resize: none;
+}
+
+._contentForm {
+	font-family: 돋움, arial;
+	font-size: 13px;
+	font-family: Verdana;
+	font-style: normal;
+	width: 680px;
+	height: 300px;
+	border: 1px solid #ccc;
+	padding: 10px;
+	resize: none;
+}
+
+.mypage_outer {
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+.box li {
+	list-style: none;
+	display: inline-table;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.box {
+	position: relative;
+	border: solid 1px #ccc;
+	width: 700px;
+	margin: auto;
+	padding: 20px 20px; /* 상하 좌우 */
+}
+
+#boxHeader {
+	color: black;
+	font-size: 35px;
+	font-weight: bold;
+	display: inline-block;
+	text-align: center;
+}
+
+a.button {
+	display: inline-block;
+	width: 120px;
+	line-height: 30px;
+	text-align: center;
+	background-color: #222;
+	color: #fff;
+	font-size: 12pt;
+	text-decoration: none;
+}
+
+.button {
+	width: 100px;
+	height: 30px;
+	border: none;
+	background-color: #222;
+	font-size: 12pt;
+	color: #fff;
+}

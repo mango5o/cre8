@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+.viewTB {
+	margin: 0 auto;
+	width: 800px;
+	border-collapse: collapse;
+}
+
+.viewTB tbody td {
+	border-bottom: 1px solid #6a6a6a;
+	padding: 10px;
+	text-align: center;
+}
+
+.viewTB th {
+	padding: 10px;
+	background-color: #eaeaea;
+}
+
+#_title {
+	text-align: left;
+}
+
+#_content {
+	text-align: left;
+}
+
+.txt{
+		text-align: left;
+			border: 1px solid #6a6a6a;
+			
+}
+
+#_left {
+	text-align: left;
+}
+
+#_right {
+	text-align: right;
+}
+
+#_titleID {
+	text-align: center;
+	width: 100px;
+}
+
+#_commentID {
+	text-align: left;
+	width: 100px;
+}
+
+#_comment {
+	text-align: left;
+}
+
+#_commentDate {
+	text-align: right;
+}
+
+._likesBox {
+	width: 100px;
+	margin: 0 auto;
+	border: 2px solid gray;
+	border-radius: 20px 20px 20px 20px;
+	padding: 5px;
+}
+
+a.button {
+	display: inline-block;
+	width: 100px;
+	line-height: 30px;
+	text-align: center;
+	background-color: #222;
+	color: #fff;
+	font-size: 12pt;
+	text-decoration: none;
+}
+
+.button {
+	width: 100px;
+	height: 30px;
+	border: none;
+	background-color: #222;
+	font-size: 12pt;
+	color: #fff;
+}
+
+a.donateButton {
+	display: inline-block;
+	width: 120px;
+	line-height: 30px;
+	text-align: center;
+	background-color: #222;
+	color: #fff;
+	font-size: 12pt;
+	text-decoration: none;
+}
+
+.donateButton {
+	width: 120px;
+	height: 30px;
+	border: none;
+	background-color: #222;
+	font-size: 12pt;
+	color: #fff;
+}
+
+.commenttxt {
+	height: 20px;
+}

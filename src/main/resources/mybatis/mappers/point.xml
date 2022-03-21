@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 포인트 관련 SQL을 핸들링할 것이다. -->
+
+<mapper namespace="mapper.point">
+	<resultMap id="pointResult" type="pointDTO">
+		<result property="point_no" column="point_no" />
+		<result property="point_id" column="point_id" />
+		<result property="currentPoint" column="point" />
+		<result property="incomePoint" column="income" />
+		<result property="outgoPoint" column="outgo" />
+		<result property="pointCase" column="case" />
+		<result property="boardCode" column="board_code" />
+		<result property="donator" column="donator" />
+		<result property="pointDate" column="point_date" />
+	</resultMap>
+
+	<resultMap id="donatePointResult" type="java.util.Map">
+		<result property="point_no" column="point_no" />
+		<result property="currentPoint" column="point" />
+		<result property="outgoPoint" column="outgo" />
+		<result property="pointCase" column="case" />
+		<result property="boardCode" column="board_code" />
+		<result property="boardTitle" column="board_title" />
+		<result property="donator" column="donator" />
+		<result property="nickname" column="nickname" />
+		<result property="pointDate" column="point_date" />
+	</resultMap>
+
+
+	
+	<!-- 아이디별 포인트 현재 잔액을 불러온다 -->
+	<select id="selectByIdPoint" resultType="int"
+		parameterType="String">
+      <![CDATA[
+     	select NVL(MAX(point), 0) from 
+     	(select point from point
+     	where point_id=#{id}
+     	order by point_date desc)
+     	where rownum=1	
+      ]]>
+	</select>
+	
+	<!-- 아이디별 후원 건수 카운트 -->
+	<select id="selectByIdDonateCount" resultType="int" parameterType="String">
+      <![CDATA[
+		SELECT COUNT (*) from point 
+		where case=2 and 
+		point_id=#{id}      
+		]]>
+	</select>
+
+	<!-- 아이디별 후원한 리스트를 불러온다 -->
+	<!--  2021. 10. 16. 쿼리 오류 수정 -->
+	<select id="selectByIdDonateList" resultMap="donatePointResult" parameterType="String">
+      <![CDATA[
+		select point.point_no, point.point_no, point.point, point.outgo, point.case, point.board_code, board.board_title, point.donator, member.nickname, point.point_date
+		from point, board, member 
+		where point.board_code = board.board_code and
+		point.donator = member.id
+		and
+		point_id=#{id}
+		and case=2
+		order by point_date desc
+      ]]>
+	</select>
+
+	<!-- 아이디별 포인트 전체 리스트를 불러온다 -->
+	<select id="selectByIdPointList" resultMap="pointResult" parameterType="String">
+      <![CDATA[
+      	select point, income, outgo, case, board_code, donator, point_date from point
+      	where point_id=#{id}
+      	order by point_date desc
+      ]]>
+	</select>
+
+	<!-- 아이디별 포인트 전체 리스트를 불러온다 -->
+	<select id="selectByIdPointListPG" resultMap="pointResult" parameterType="String">
+      <![CDATA[
+      	select point, income, outgo, case, board_code, donator, point_date
+   		from (
+       		 	select point, income, outgo, case, board_code, donator, point_date,
+        		row_number() over(order by point_no desc) as rNum
+        		from point where point_id=#{id}
+        ) pp
+    	where rNum between 1 and 10
+        order by point_date desc   	      	
+      ]]>
+	</select>
+
+	<!-- 포인트 거래내역 새 번호를 받아온다 -->
+	<select id="selectNewPointNO" resultType="int">
+		<![CDATA[
+		SELECT  max(point_no)+1 
+		from point			
+		]]>
+	</select>
+	
+	<!-- 후원기능 (A에게서 후원포인트를 차감한다) -->
+	<insert id="insertActionPoint1" parameterType="java.util.Map">
+		<![CDATA[
+		 insert into point
+		 (point_no, point_id, point, outgo, case, board_code, donator, point_date)
+		 values(#{point_no}, #{point_id}, #{currentPoint}, #{outgoPoint}, #{pointCase}, #{boardCode}, #{donator}, sysdate)
+		]]>      
+	</insert>
+	
+	<!-- 후원기능 (B에게 후원포인트를 증가시킨다) -->
+	<insert id="insertActionPoint2" parameterType="java.util.Map">
+		<![CDATA[
+		 insert into point
+		 (point_no, point_id, point, income, case, board_code, donator, point_date)
+		 values(#{point_no}, #{point_id}, #{currentPoint}, #{incomePoint}, #{pointCase}, #{boardCode}, #{donator}, sysdate)
+		]]>      
+	</insert>	
+	
+	<!-- 포인트를 증가한다 -->
+	<insert id="insertActionIncomePoint" parameterType="java.util.Map">
+		<![CDATA[
+		 insert into point
+		 (point_no, point_id, point, income, case, point_date)
+		 values(#{point_no}, #{point_id}, #{currentPoint}, #{incomePoint}, #{pointCase}, sysdate)
+		]]>      
+	</insert>
+
+	<!-- 포인트를 감소한다 -->
+	<insert id="insertActionOutgoPoint" parameterType="java.util.Map">
+		<![CDATA[
+		 insert into point
+		 (point_no, point_id, point, outgo, case, point_date)
+		 values(#{point_no}, #{point_id}, #{currentPoint}, #{outgoPoint}, #{pointCase}, sysdate)
+		]]>      
+	</insert>
+
+</mapper>
+
+

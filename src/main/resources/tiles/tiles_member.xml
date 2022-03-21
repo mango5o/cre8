@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>
+	<definition name="baseLayout"
+		template="/WEB-INF/views/common/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header"
+			value="/WEB-INF/views/common/header.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer"
+			value="/WEB-INF/views/common/footer.jsp" />
+	</definition>
+
+	<definition name="main" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/main.jsp" />
+	</definition>
+
+	<definition name="about" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 소개" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/about.jsp" />
+	</definition>
+
+	<definition name="/member/listMembers" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 회원목록" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/listMembers.jsp" />
+	</definition>
+
+	<definition name="/member/mypage" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 마이페이지" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/mypage.jsp" />
+	</definition>
+
+	<definition name="/member/modMember" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 회원정보 수정" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/modMember.jsp" />
+	</definition>
+
+	<definition name="/member/resignMember" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 회원탈퇴" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/resignMember.jsp" />
+	</definition>
+
+
+
+	<definition name="/member/loginForm" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 로그인" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/loginForm.jsp" />
+	</definition>
+
+	<definition name="/member/memberForm" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 회원가입" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/memberForm.jsp" />
+	</definition>
+
+	<definition name="/member/mypoint" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 마이포인트" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/mypoint.jsp" />
+	</definition>
+
+	<definition name="/member/mylikes" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 나의 좋아요" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/mylikes.jsp" />
+	</definition>
+
+	<definition name="/member/mydonate" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 나의 후원" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/mydonate.jsp" />
+	</definition>
+
+
+	<definition name="/member/donate" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 후원하기" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/donate.jsp" />
+	</definition>
+
+	<definition name="/member/donateResult" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 후원결과" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/donateResult.jsp" />
+	</definition>
+
+
+
+	<definition name="/member/myIncomePoint"
+		extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 포인트 충전 신청" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/myIncomePoint.jsp" />
+	</definition>
+
+	<definition name="/member/myIncomePointResult"
+		extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 포인트 충전 결과" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/myIncomePointResult.jsp" />
+	</definition>
+
+	<definition name="/member/myOutgoPoint" extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 포인트 출금 신청" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/myOutgoPoint.jsp" />
+	</definition>
+
+	<definition name="/member/myOutgoPointResult"
+		extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 포인트 출금 신청결과" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/myOutgoPointResult.jsp" />
+	</definition>
+
+	<definition name="/member/adminPointHandle"
+		extends="baseLayout">
+		<put-attribute name="title" value="크리에잇 - 포인트 핸들링" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/adminPointHandle.jsp" />
+	</definition>
+
+
+</tiles-definitions>

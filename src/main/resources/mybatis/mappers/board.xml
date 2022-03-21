@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+<!-- board의 SQL을 제어할 것이다. -->
+
+<mapper namespace="mapper.board">
+<resultMap id="articlesResult" type="articleVO">
+    <result property="articleNO" column="board_code" />
+    <result property="categoryNO" column="cate_code" />
+    <result property="id" column="board_writer" />
+    
+    <!-- articleVO 객체에 닉네임을 저장하기 위해 추가 -->
+    <!-- 닉네임은 member 테이블을 조인하여 확인한다. -->
+    <result property="nickname" column="nickname" />
+
+    <result property="title" column="board_title" />      
+    <result property="content" column="board_content" />
+    <result property="imageFileName" column="filename" />
+    <result property="writeDate" column="board_date" />
+    <result property="usage" column="usage" />
+  </resultMap> 
+  
+
+  <resultMap id="imgResult" type="imageVO">
+	  <result property="imageFileNO" column="imageFileNO" />
+	  <result property="articleNO" column="articleNO" />
+	  <result property="imageFileName" column="imageFileName" />
+ </resultMap>
+
+	<!--  댓글 -->
+  <resultMap id="commentsResult" type="commentsVO">
+	  <result property="commentNO" column="com_no" />
+	  <result property="articleNO" column="board_code" />
+	  <result property="commentId" column="com_writer" />
+	  <result property="commentNickname" column="nickname" />
+	  <result property="commentContent" column="com_content" />
+  	  <result property="commentDate" column="com_date" />	  
+	  <result property="commentUsage" column="com_usage" />
+ </resultMap>
+
+
+<resultMap id="articlesAdminResult" type="adminArticleVO">
+    <result property="articleNO" column="admin_bno" />
+    <result property="id" column="mem_id" />
+    <result property="title" column="board_title" />      
+    <result property="content" column="board_content" />
+    <result property="usage" column="usage" />
+    <result property="writeDate" column="board_date" />
+  </resultMap> 
+  
+
+<!--  모든 목록 불러오기 -->
+<!-- 2021. 10. 07. 닉네임 불러오기를 위해 SQL문 수정 -->
+  <select id="selectAllArticlesList" resultMap="articlesResult"   >
+    <![CDATA[
+	select board.board_code, board.cate_code, board.board_title, board.board_content,
+	board.board_writer, member.nickname, board.board_date, board.filename, board.usage
+	from board
+	join member on (board.board_writer = member.id)
+	order by board_code desc	
+    ]]>
+  </select>
+
+
+<!-- 카데고리별로 글을 불러온다 -->  
+  <select id="selectAllArticlesListByCategory" resultMap="articlesResult" parameterType="int">
+    <![CDATA[
+	select board.board_code, board.cate_code, board.board_title, board.board_content,
+	board.board_writer, member.nickname, board.board_date, board.filename, board.usage
+	from board
+	join member on (board.board_writer = member.id)
+	where 
+    cate_code=#{categoryNO}
+    and usage=0	
+	order by board_code desc	
+    ]]>
+  </select>
+  
+  <!-- 인기글 (좋아요 1개 이상)을 불러온다 -->
+    <select id="selectHotArticlesListByCategory" resultMap="articlesResult" parameterType="int">
+    <![CDATA[
+	WITH A AS
+	(select board_code, count (board_code) as likeCount from likes group by board_code)
+	select board.board_code, A.likeCount, board.cate_code, board.board_title, board.board_content,
+	board.board_writer, member.nickname, board.board_date, board.filename, board.usage
+	from board, member, A
+	where 
+    board.board_writer = member.id
+    and board.board_code = A.board_code
+    and cate_code=#{categoryNO}
+    and usage=0
+	order by likecount desc, board_date desc
+    ]]>
+  </select>
+  
+  
+  
+  
+  
+    <select id="selectAllAdminArticlesList" resultMap="articlesAdminResult"   >
+    <![CDATA[
+	select admin_bno, mem_id, board_title, board_content, usage, board_date
+	from admin_board
+	order by board_date desc	
+    ]]>
+  </select>
+  
+  
+  
+ <!-- DB의 새 글 번호를 받아온다 -->	
+  <select id="selectNewBoardCodeNO" resultType="int">
+		<![CDATA[
+		SELECT  max(board_code)+1 
+		from board				
+		]]>
+	</select>
+
+ <!-- 관리자 게시판 DB의 새 글 번호를 받아온다 -->	
+  <select id="selectNewAdminBoardCodeNO" resultType="int">
+		<![CDATA[
+		SELECT  max(admin_bno)+1 
+		from admin_board				
+		]]>
+	</select>
+
+
+	<!--  글 보기 -->
+	<!-- resultType="articleVO"으로 받아서 값이 안 들어왔음. map으로 받아야 -->
+	
+  <select id="selectArticle" resultMap="articlesResult" parameterType="int">
+    <![CDATA[
+	  select board.board_code, board.cate_code, board.board_title, board.board_content,
+	  board.board_writer, member.nickname, board.board_date, board.filename, board.usage
+	  from board
+	  join member on (board.board_writer = member.id)
+      where 
+      board_code=#{articleNO}
+      and usage=0		
+    ]]>
+  </select>
+  
+  <!-- (관리자 모드) 삭제된 글도 보여준다. -->
+   <select id="selectDeleteArticleView" resultMap="articlesResult" parameterType="int">
+    <![CDATA[
+	 select board.board_code, board.cate_code, board.board_title, board.board_content,
+	 board.board_writer, member.nickname, board.board_date, board.filename, board.usage
+	 from board
+	 join member on (board.board_writer = member.id)
+     where 
+     board_code=#{articleNO}
+    ]]>
+  </select>
+  
+  <!-- 관리자 게시판의 글을 불러온다 -->
+    <select id="selectAdminArticle" resultMap="articlesAdminResult" parameterType="int">
+    <![CDATA[
+		select admin_bno, mem_id, board_title, board_content, usage, board_date
+		from admin_board
+	    where admin_bno=#{articleNO} 		
+    ]]>
+  </select>
+
+<!-- 특정 사용자가 쓴 글 보기 -->
+  <select id="selectArticleById" resultMap="articlesResult" parameterType="int">
+    <![CDATA[
+	select board.board_code, board.cate_code, board.board_title, board.board_content,
+	board.board_writer, member.nickname, board.board_date, board.filename, board.usage
+	from board
+	join member on (board.board_writer = member.id)
+	where board_writer=#{id}
+	and usage=0
+	order by board_code desc
+    ]]>
+  </select>
+
+<!-- 특정 키워드의 글 보기 -->
+  <select id="selectArticleByKeyword" resultMap="articlesResult" parameterType="int">
+    <![CDATA[
+	select board.board_code, board.cate_code, board.board_title, board.board_content,
+	board.board_writer, member.nickname, board.board_date, board.filename, board.usage
+	from board
+	join member on (board.board_writer = member.id)
+	where (board_title like #{keyword} or board_content like #{keyword})
+	and board.usage=0
+    ]]>
+  </select>
+  
+<!-- 특정 키워드의 글 카운트하기 -->
+   	<select id="selectArticleCountByKeyword" resultType="int" parameterType="String" >
+      <![CDATA[
+      	select count (board_code) 
+      	from board 
+      	where board_writer=#{id}
+      	and usage=0
+      ]]>
+</select>
+
+<!-- 특정 사용자가 쓴 글 갯수 가져오기 -->
+   	<select id="selectArticleCountById" resultType="int" parameterType="String" >
+      <![CDATA[
+      	select count (board_code) 
+      	from board 
+      	where board_writer=#{id}
+      	and usage=0
+      ]]>
+	 </select>
+
+ <!-- 댓글의 새 글 번호를 받아온다 -->	
+  <select id="selectNewCommentsNO" resultType="int">
+		<![CDATA[
+		SELECT  max(com_no)+1 
+		from comments			
+		]]>
+	</select>
+
+<!--  댓글을 보자 -->
+ <select id="selectComments" resultMap="commentsResult" parameterType="int">
+    <![CDATA[
+	  select comments.com_no, comments.board_code, comments.com_writer, member.nickname, 
+	  comments.com_content, comments.com_date, comments.com_usage
+	  from comments
+	  join member on (comments.com_writer = member.id)
+      where 
+      board_code=#{articleNO}
+      and com_usage=0	
+      order by comments.com_date asc		
+    ]]>
+  </select>
+
+<!-- 댓글쓰기 -->	 
+<insert id="insertComments"  parameterType="java.util.Map">
+		<![CDATA[
+		insert into comments (com_no, board_code, com_writer, com_content, com_date, com_usage)
+		values 
+		(#{commentNO}, #{articleNO}, #{commentId}, #{commentContent}, sysdate, 0)
+		]]>      
+</insert>
+
+<!-- 댓글을 삭제한다. (DB에서 usage를 1로 바꿔주는 것 뿐임) -->	
+<update id="updateDeleteComments" parameterType="int">
+    <![CDATA[
+			update comments
+			set com_usage=1	 
+			where com_no=#{commentNO}
+    ]]>      
+</update>
+
+  <!-- 글쓰기 (단일이미지)  -->	 
+  <insert id="insertNewArticle"  parameterType="java.util.Map">
+		<![CDATA[
+			INSERT into board(board_code, cate_code, board_title, board_content, board_writer, filename, board_date, usage)
+			VALUES(#{articleNO}, #{categoryNO}, #{title}, #{content}, #{id}, #{imageFileName}, sysdate, 0)
+		]]>      
+	</insert>
+
+  <!-- 글쓰기 (포인트 충전요청)  -->	 
+  <insert id="insertNewAdminArticle"  parameterType="java.util.Map">
+		<![CDATA[
+			INSERT into admin_board(admin_bno, mem_id, board_title, board_content, board_date, usage)
+			VALUES(#{admin_bno}, #{id}, #{title}, #{content}, sysdate, 0)
+		]]>      
+	</insert>
+
+ 
+
+  
+  <!-- 글수정 -->	 
+  <update id="updateArticle"  parameterType="java.util.Map">
+			update board
+			set 
+			cate_code=#{categoryNO},	 
+			board_title=#{title},	 
+			board_content=#{content}
+			 <if test="imageFileName!='' and imageFileName!=null">
+			  , fileName=#{imageFileName}
+			</if>
+			where board_code=#{articleNO}
+	</update>
+
+
+<!-- 포인트 요청글 처리 (DB에서 usage를 1로 바꿔주는 것 뿐임) -->	
+<update id="updateAdminPointArticleChecked" parameterType="int">
+    <![CDATA[
+			update admin_board
+			set usage=1	 
+			where admin_bno=#{articleNO}
+    ]]>      
+</update>
+
+
+<!-- 글을 삭제한다. (DB에서 usage를 1로 바꿔주는 것 뿐임) -->	
+<update id="updateDeleteArticle" parameterType="int">
+    <![CDATA[
+			update board
+			set usage=1	 
+			where board_code=#{articleNO}
+    ]]>      
+</update>
+
+  <!--  글을 삭제한다. --> 
+   <delete id="deleteArticle"  parameterType="int">
+    <![CDATA[
+      delete from t_board
+      where articleNO in (
+         SELECT articleNO FROM  t_board
+         START WITH articleNO = #{articleNO}
+         CONNECT BY PRIOR  articleNO = parentNO )
+    ]]>      
+  </delete>
+
+ 
+  <select id="selectNewImageFileNO" resultType="int"  >
+    <![CDATA[
+      SELECT  nvl(max(imageFileNO),0) from t_imageFile		
+    ]]>
+  </select>
+	
+
+  <select  id="selectImageFileList" resultMap="imgResult" parameterType="int">
+    <![CDATA[
+      SELECT * from t_imageFile
+      where articleNO=#{articleNO}	
+      and usage=0	
+    ]]>
+  </select> 
+  
+  
+</mapper>
